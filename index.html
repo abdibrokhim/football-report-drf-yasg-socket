@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Socket</title>
+</head>
+<body>
+    <h1 id="main">Random number generator</h1>
+    <h1 id="number">1</h1>
+
+    <script>
+        number_one=document.getElementById('number')
+        const endpoint = 'ws://127.0.0.1:8000/practise/';
+        const socket = new WebSocket(endpoint);
+        console.log(endpoint)
+
+        socket.onopen = function(e){
+            console.log('open', e)
+            socket.send(1)
+        }
+
+        socket.onmessage = function(e){
+            console.log('message', e)
+            number_one.innerHTML=e.data
+            socket.send(1)
+        }
+    </script>
+</body>
+</html>
