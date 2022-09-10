@@ -5,34 +5,33 @@
     <title>Football</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
 </head>
 <body>
     <header>
         <div class="container">
             <div id="title" class="text-center mt-5 mb-3 fs-1">Football Real Time Table</div>
             <div id="date_time" class="text-center fs-5">
-                <div id="date" class="text-center fs-5">08.09.2022</div>
-                <div id="time" class="text-center fs-5">18:57</div>
+                <div id="date" class="text-center fw-lighter fs-5">08.09.2022</div>
+                <div id="time" class="text-center fw-lighter fs-5">18:57</div>
             </div>
         </div>
     </header>
     <section>
         <div class="container">
             <div id="table" class="mt-5">
+                <div id="refresh_timetable" class="fw-lighter mb-1 d-flex">
+                    <i id='refresh_icon' class="fi fi-rr-refresh ms-3"></i>
+                    <div id="text" class="ms-3">Updated</div>
+                    <div id="refresh_time" class="ms-1">1</div>
+                    <div id="text" class="">s ago</div>
+                </div>
                 <div id="single_table">
-                    <div id="table_caption" class="bg-secondary text-white fs-5 p-2 ps-3 fw-bold">Superliga</div>
                     <div id="table_content" class="d-flex border-bottom ">
-                        <div id="table_content_time" class="p-2">08.09.2022 18:57</div>
                         <div id="table_content_team" class="p-2 d-flex">
-                            <div id="table_content_team_1" class="d-flex">
-                                <div id="table_content_team_1_name">Bunyodkor</div>
-                                <div id="table_content_team_1_score" class="ms-1 fw-bold">1</div>
-                            </div>
+                            <div id="table_content_team_1" class="d-flex"></div>
                             <div id="diveder">:</div>
-                            <div id="table_content_team_2" class="d-flex">
-                                <div id="table_content_team_2_score" class="fw-bold">2</div>
-                                <div id="table_content_team_2_name" class="ms-1">Paxtakor</div>
-                            </div>
+                            <div id="table_content_team_2" class="d-flex"></div>
                         </div>
                     </div>
                 </div>
@@ -40,5 +39,59 @@
         </div>
     </section>
 
+    <script>
+        const singleTable = document.getElementById("single_table");
+        let tableCaption = "";
+        const tableContent = document.getElementById("table_content");
+        let tableContentTime = "";
+        const tableContentTeam = document.getElementById("table_content_team");
+        let team1 = "";
+        let team2 = "";
+
+        const ligaNames = ["La-Liga", "APL", "RPL", "A-Liga"];
+        const time = ["08.09.2022 18:57", "08.09.2022 18:57", "08.09.2022 18:57", "08.09.2022 18:57"];
+        const _team1 = ["Bunyodkor", "Paxtakor", "Bunyodkor", "Paxtakor"];
+        const _team1s = ["1", "1", "1", "1"];
+        const _team2 = ["Paxtakor", "Bunyodkor", "Paxtakor", "Bunyodkor"];
+        const _team2s = ["2", "2", "2", "2"];
+
+        let info = "";
+
+        function dataLooping() {
+            let i = 0;
+            while (i < ligaNames.length) {
+
+                tableCaption = `<div id="table_caption" class="bg-secondary text-white fs-5 p-2 ps-3 fw-bold">${ligaNames[i]}</div>`;
+
+                tableContentTime = `<div id="table_content_time" class="p-2">${time[i]}</div>`;
+
+                team1 = `<div id="table_content_team_1_name">${_team1[i]}</div>`;
+                team1 = `<div id="table_content_team_1_score" class="ms-1 fw-bold">${_team1s[i]}</div>`;
+
+                team2 = `<div id="table_content_team_2_score" class="ms-1 fw-bold">${_team2s[i]}</div>`;
+                team2 = `<div id="table_content_team_2_name">${_team2[i]}</div>`;
+
+                tableContentTeam.innerHTML += team1;
+                tableContentTeam.innerHTML += team2;
+
+                tableContent.innerHTML += tableContentTime;
+                tableContent.innerHTML += tableContentTeam;
+
+                singleTable.innerHTML += tableCaption;
+                singleTable.innerHTML += tableContent.innerHTML;
+
+
+                i += 1;
+            }
+        }
+        dataLooping();
+
+        const btn = document.getElementById('refresh_icon');
+
+        btn.addEventListener('click', () => {
+            const num = document.getElementById("refresh_time");
+            num.innerText = "0";
+        });
+    </script>
 </body>
 </html>
