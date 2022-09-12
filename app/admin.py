@@ -3,7 +3,7 @@ from app.models import Game, Liga, Team
 
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('date', 'point', 'ghost', 'team_1', 'team_2')
+    list_display = ('liga_name', 'date', 'team1', 'point', 'team2')
 
 
 class LigaAdmin(admin.ModelAdmin):
@@ -11,7 +11,7 @@ class LigaAdmin(admin.ModelAdmin):
 
 
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('name', 'logo')
+    list_display = ('name', 'logo', 'ghost')
 
 
 admin.site.register(Game, GameAdmin)
