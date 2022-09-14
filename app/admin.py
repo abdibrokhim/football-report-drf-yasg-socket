@@ -3,7 +3,7 @@ from app.models import Game, Liga, Team
 
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('liga_name', 'date', 'team1', 'point', 'team2')
+    list_display = ('liga', 'date', 'team')
 
 
 class LigaAdmin(admin.ModelAdmin):

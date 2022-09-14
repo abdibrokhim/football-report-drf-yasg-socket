@@ -16,6 +16,7 @@
 
         socket.onopen = function(e){
             console.log('open', e)
+            number_one.innerHTML=e.data
             socket.send(1)
         }
 
