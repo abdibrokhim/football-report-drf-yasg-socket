@@ -24,8 +24,10 @@ games = soup.find_all("div", id="online_tablo")
 
 info = []
 
+
 def scrape_data():
     global data_list
+    info = []
     for g in games[0].ul.find_all("li"):
         data_list = []
         data = {}
@@ -68,4 +70,3 @@ def scrape_data():
 
 
 scrape_data()
-
