@@ -1,21 +1,8 @@
 from channels.consumer import AsyncConsumer
 
+import json
 import scrape
-from app import models, serializers
-from asgiref.sync import sync_to_async
-
-
-# @sync_to_async
-# def _get_data():
-#     games = models.Game.objects.all()
-#     serializer = serializers.GameSerializer(games, many=True)
-#     return serializer.data
-#
-#
-# @sync_to_async
-# def _get_datas():
-#     game = models.Game.objects.all()
-#     return game
+from pprint import pprint
 
 
 class PracticeConsumer(AsyncConsumer):
@@ -24,10 +11,13 @@ class PracticeConsumer(AsyncConsumer):
 
         await self.send({"type": "websocket.accept"})
 
-        data = scrape.scrape_data()
-        print('client.py data:', data)
+    async def websocket_receive(self, event):
+        print("retrive", event, type(event))
 
-        await self.send({"type": "websocket.send", "text": [i.encode('utf-8') for i in data]})
+        if event['text'] == "1":
+            data = scrape.scrape_data()
+            pprint(data)
+            await self.send({"type": "websocket.send", "text": json.dumps(data)})
 
     async def websocket_disconnect(self, event):
         print("disconnected", event)
