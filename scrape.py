@@ -24,8 +24,10 @@ games = soup.find_all("div", id="online_tablo")
 
 info = []
 
+
 def scrape_data():
     global data_list
+    info = []
     for g in games[0].ul.find_all("li"):
         data_list = []
         data = {}
@@ -50,22 +52,21 @@ def scrape_data():
 
                     match.update({'time': f'{time}'})
                     match.update({'team': f'{team}'})
-                    print('Match:', match)
+                    # print('Match:', match)
 
                     match_list.append(match)
-                print('\n\nMatch list:', match_list)
+                # print('\n\nMatch list:', match_list)
 
                 data.update({'name': f'{liga}'})
                 data.update({'matches': match_list})
                 data_list.append(data)
-                print('\n\nData list:', data_list)
+                # print('\n\nData list:', data_list)
 
             info.append(data_list)
-            print('Info:', info)
+            # print('Info:', info)
         except:
             pass
     return info
 
 
 scrape_data()
-

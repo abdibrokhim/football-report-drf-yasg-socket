@@ -2,29 +2,134 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Socket</title>
+    <title>Football</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="main">Random number generator</h1>
-    <h1 id="number">1</h1>
+<header>
+    <div class="container-sm">
+        <div id="title" class="text-center mt-5 fs-1 fw-bold">
+            <a href="#" title="Real Time Football Table">Real Time Football Table</a>
+        </div>
+        <div class="text-center">
+            <div id="_last_update" class="d-inline text-center fw-light fs-5">Last update:</div>
+            <div id="_date" class="d-inline text-center fw-lighter fs-5"></div>
+            <div id="_time" class="d-inline text-center fw-lighter fs-5"></div>
+        </div>
+    </div>
+</header>
+<section>
+    <div class="container-sm">
+        <div id="table" class="mt-5">
+            <div id="refresh_timetable" class="fw-lighter mb-1 d-flex justify-content-end">
+                <i id='refresh_icon' class="fi fi-rr-refresh ms-3" title="Press to update"></i>
+                <div id="text" class="ms-3">Updated</div>
+                <div id="refresh_time" class="ms-1 fw-light"> 0 </div>
+                <div id="text" class=""> s ago</div>
+            </div>
 
-    <script>
-        number_one=document.getElementById('number')
-        const endpoint = 'ws://127.0.0.1:8000/practise/';
-        const socket = new WebSocket(endpoint);
-        console.log(endpoint)
+            <div id="single_table" class="fw-bold">
+                <div id="table_content" class="d-flex border-bottom"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="mt-5 p-5">
+    <div class="container-sm">
+        <div class="team">
+            <div class="team_text d-flex justify-content-center">Real time Football table by <a href="https://ba.uz/" class="ms-1 me-1" target="_blank" title="ba.uz">ba.uz</a> students</div>
+        </div>
+    </div>
+</footer>
+<script>
+    const endpoint = 'ws://127.0.0.1:8000/practise/';
+    const socket = new WebSocket(endpoint);
 
-        socket.onopen = function(e){
-            console.log('open', e)
-            number_one.innerHTML=e.data
-            socket.send(1)
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    const h = String(today.getHours()).padStart(2, '0');
+    const m = String(today.getMinutes()).padStart(2, '0');
+    const s = String(today.getSeconds()).padStart(2, '0');
+
+    const todate = mm + '.' + dd + '.' + yyyy;
+    const totime = h + ':' + m + ':' + s;
+
+    const date = document.getElementById("_date");
+    const time = document.getElementById("_time");
+
+    socket.onopen = function(e){
+        console.log(e)
+        socket.send("1");
+    }
+
+    socket.onmessage = function(e){
+        const data_list = JSON.parse(e.data);
+        const singleTable = document.getElementById("single_table");
+        let counter_liga = 0;
+
+        date.innerHTML = todate;
+        time.innerHTML = totime;
+
+        for (const name in data_list) {
+            counter_liga += 1;
+            let tableCaption = "";
+            let tableContent = "";
+            tableCaption = `<div id="table_caption" class="text-white fs-5 p-2 ps-3 fw-bold">${data_list[name][0].name}</div>`;
+
+            for (const match in data_list[name][0].matches) {
+                {
+                    tableContent += `
+                        <div class="time_team_holder fw-lighter mb-2 mt-2 d-flex justify-content-start">
+                            <div id="table_content_time">${data_list[name][0].matches[match].time}</div>
+                            <div id="table_content_team">&nbsp;&nbsp;${data_list[name][0].matches[match].team}</div>
+                        </div>
+                    `;
+                }
+
+                singleTable.innerHTML += tableCaption;
+                singleTable.innerHTML += tableContent;
+
+                tableCaption = "";
+                tableContent = "";
+            }
+            console.log(counter_liga);
+            socket.close();
+        }}
+
+    let counter = 0;
+    const max_count = 1000000;
+
+    const btn = document.getElementById('refresh_icon');
+    btn.addEventListener('click', () => {
+        const num = document.getElementById("refresh_time");
+        num.innerText = "0";
+        date.innerHTML = todate;
+        time.innerHTML = totime;
+        window.location.reload();
+        counter = 0;
+    });
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function runTime() {
+        let i = 1;
+        while(i < max_count) {
+            console.log(`Waiting ${i} seconds...`);
+            await sleep(1000);
+            const timer = document.getElementById("refresh_time");
+            timer.innerText = counter;
+            counter++;
+            i += 1;
         }
-
-        socket.onmessage = function(e){
-            console.log('message', e)
-            number_one.innerHTML=e.data
-            socket.send(1)
-        }
-    </script>
+    }
+    runTime();
+</script>
 </body>
 </html>

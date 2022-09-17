@@ -1,0 +1,48 @@
+body {
+    background-color: #FFEDD8;
+    color: #583101;
+    max-width: 800px;
+    margin: auto;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(6px);
+}
+
+header #title a{
+    cursor: pointer;
+    text-decoration: none;
+    color: #583101;
+}
+
+#refresh_icon {
+    cursor: pointer;
+}
+
+#table_caption {
+    background-color: #BC8A5F;
+}
+
+.time_team_holder {
+    border-bottom: 1px solid #583101;
+}
+
+footer .team {
+    font-size: 14px;
+}
+
+.team_text a{
+    text-decoration: none;
+    color: #583101;
+    font-weight: bold;
+}
+
+.team_text a:hover {
+    color: #BC8A5F;
+}
+
+.team_text a:active {
+    color: #1DB954;
+}
